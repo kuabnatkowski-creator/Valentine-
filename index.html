@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Walentynki - jebany projekt</title>
+  <title>Walentynki – chaos totalny 😈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- confetti -->
@@ -19,6 +19,7 @@
       align-items: center;
       color: white;
       text-align: center;
+      overflow: hidden;
     }
 
     .box {
@@ -36,6 +37,7 @@
       border: none;
       border-radius: 12px;
       cursor: pointer;
+      transition: all 0.2s ease;
     }
 
     .yes {
@@ -46,7 +48,7 @@
     .no {
       background: #ef4444;
       color: black;
-      position: relative;
+      position: absolute;
     }
 
     img {
@@ -71,30 +73,34 @@
 <script>
 const noBtn = document.getElementById("noBtn");
 let failCount = 0;
-
-// teksty przycisku NIE
 const texts = ["proszę", "a może jednak", "no weź", "serio?"];
+let size = 100; // początkowy rozmiar %
 
 noBtn.addEventListener("mouseover", () => {
   failCount++;
-  if(failCount >= 5) {
+
+  // zmniejsz przycisk
+  size *= 0.85;
+  noBtn.style.transform = `scale(${size/100})`;
+
+  // zmiana tekstu
+  if(failCount < 5){
+    noBtn.textContent = texts[Math.floor(Math.random() * texts.length)];
+
+    // losowe położenie
+    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+  } else {
     // po 5 próbach zmienia się w TAK
     noBtn.textContent = "TAK";
     noBtn.classList.remove("no");
     noBtn.classList.add("yes");
+    noBtn.style.position = "static";
+    noBtn.style.transform = "scale(1)";
     noBtn.onclick = yesClick;
-    return;
   }
-
-  // zmiana tekstu przycisku
-  noBtn.textContent = texts[Math.floor(Math.random() * texts.length)];
-
-  // losowe położenie przycisku
-  const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-  const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-  noBtn.style.position = "absolute";
-  noBtn.style.left = x + "px";
-  noBtn.style.top = y + "px";
 });
 
 function yesClick() {
@@ -105,8 +111,8 @@ function yesClick() {
 
   // konfetti fioletowo-niebieskie
   confetti({
-    particleCount: 220,
-    spread: 120,
+    particleCount: 300,
+    spread: 150,
     origin: { y: 0.6 },
     colors: ['#a855f7', '#3b82f6']
   });
@@ -115,7 +121,7 @@ function yesClick() {
   document.getElementById("content").innerHTML = `
     <h1>No to jesteś w dupie 😈</h1>
     <p>Ale już za późno, zgodziłaś się 💜</p>
-    <img src="hello-kitty.gif" alt="Hello Kitty">
+    <img src="hello-kitty.gif" alt="Hello Kitty 1">
     <img src="https://media.tenor.com/6d6H1n9h6j8AAAAC/hello-kitty.gif" alt="Hello Kitty 2">
   `;
 }
