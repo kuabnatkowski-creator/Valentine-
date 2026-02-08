@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Walentynki - jebany projekt</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #c084fc, #60a5fa);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+    }
+
+    .box {
+      background: rgba(0,0,0,0.4);
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 90%;
+      position: relative;
+    }
+
+    button {
+      font-size: 20px;
+      padding: 12px 25px;
+      margin: 10px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .yes {
+      background: #22c55e;
+      color: black;
+    }
+
+    .no {
+      background: #ef4444;
+      color: black;
+      position: relative;
+    }
+
+    img {
+      max-width: 250px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box" id="content">
+  <h1>Czy będziesz moją walentynką? 💜</h1>
+  <button class="yes" onclick="yesClick()">TAK</button>
+  <button class="no" id="noBtn">NIE</button>
+</div>
+
+<!-- audio -->
+<audio id="song">
+  <source src="yalla-ara-baba.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+let failCount = 0;
+
+// teksty przycisku NIE
+const texts = ["proszę", "a może jednak", "no weź", "serio?"];
+
+noBtn.addEventListener("mouseover", () => {
+  failCount++;
+  if(failCount >= 5) {
+    // po 5 próbach zmienia się w TAK
+    noBtn.textContent = "TAK";
+    noBtn.classList.remove("no");
+    noBtn.classList.add("yes");
+    noBtn.onclick = yesClick;
+    return;
+  }
+
+  // zmiana tekstu przycisku
+  noBtn.textContent = texts[Math.floor(Math.random() * texts.length)];
+
+  // losowe położenie przycisku
+  const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+  const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+  noBtn.style.position = "absolute";
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+});
+
+function yesClick() {
+  // dźwięk
+  const audio = document.getElementById("song");
+  audio.currentTime = 0;
+  audio.play();
+
+  // konfetti fioletowo-niebieskie
+  confetti({
+    particleCount: 220,
+    spread: 120,
+    origin: { y: 0.6 },
+    colors: ['#a855f7', '#3b82f6']
+  });
+
+  // zmiana treści boxa
+  document.getElementById("content").innerHTML = `
+    <h1>No to jesteś w dupie 😈</h1>
+    <p>Ale już za późno, zgodziłaś się 💜</p>
+    <img src="hello-kitty.gif" alt="Hello Kitty">
+    <img src="https://media.tenor.com/6d6H1n9h6j8AAAAC/hello-kitty.gif" alt="Hello Kitty 2">
+  `;
+}
+</script>
+
+</body>
+</html>
